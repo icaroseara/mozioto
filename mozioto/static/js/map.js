@@ -1,14 +1,16 @@
 var map;
+var markers = [];
+var polygons = [];
 
-function init() {
+function initMap() {
     var saoPaulo = new google.maps.LatLng(-23.533, -46.616);
 
     map = new google.maps.Map(document.getElementById('map'), {
         center: saoPaulo,
         zoom: 8
     });
-
-    initPolygon();
+    
+    drawPolygon();
 }
 
 function setMarkerListener(marker){
@@ -31,28 +33,26 @@ function setMarkerListener(marker){
     });
 }
 
-function initPolygon(){
+function drawPolygon(){
     var that = this;
     
     var polygonOptions = { 
         map: that.map, 
         path: [], 
-        strokeColor: "#0000FF",
-        fillColor: '#0000FF',
+        strokeColor: "#AE3F47",
+        fillColor: '#AE3F47',
         strokeWeight: 2,
         fillOpacity: 0.35,
         strokeOpacity: 0.8 }
         
     var polygon = new google.maps.Polygon(polygonOptions);
-    
+    that.polygons.push(polygon);
     google.maps.event.addListener(that.map, 'click', function (event) {
-        console.log("Target");
         var currentPath = polygon.getPath();
         currentPath.push(event.latLng);
         
-        var marker = new google.maps.Marker({ map: that.map, position: event.latLng, draggable: true});
+        var marker = new google.maps.Marker({ map: that.map, position: event.latLng});
         setMarkerListener(marker);
+        that.markers.push(marker);
     });
 }
-
-window.onload = init;
